@@ -1,0 +1,16 @@
+{
+  "name": "04_telegram_bot_weather_forecast",
+  "version": "1.0.0",
+  "description": "telegram bot  for weather forecast",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "env $(cat .env | xargs) node ./src/app.js"
+  },
+  "author": "Alexey Pochtovik",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "node-telegram-bot-api": "^0.61.0"
+  }
+}
