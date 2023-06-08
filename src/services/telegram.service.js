@@ -43,15 +43,15 @@ export default class TelegramService {
   }
 
   onMessageTgBot() {
-    try {
-      this.bot.on("message", async (msg) => {
-        const { id: chatId } = msg.chat;
-        const userCity = msg.text.trim().toLowerCase();
+    this.bot.on("message", async (msg) => {
+      const { id: chatId } = msg.chat;
+      const userCity = msg.text.trim().toLowerCase();
 
-        if (userCity.indexOf("/") >= 0) {
-          return;
-        }
+      if (userCity.indexOf("/") >= 0) {
+        return;
+      }
 
+      try {
         const coordinates = await this.checkAndSetCityToDb(userCity, chatId);
 
         if (coordinates?.err) {
@@ -73,22 +73,22 @@ export default class TelegramService {
           TgMsgs.findOutForecast(city),
           TgBtns.checkWeather(city)
         );
-      });
-    } catch (error) {
-      return this.sendErrorMessage(error.message, chatId);
-    }
+      } catch (error) {
+        return this.sendErrorMessage(error.message, chatId);
+      }
+    });
   }
 
   onCallbackQueryTgBot() {
-    try {
-      this.bot.on("callback_query", async (msg) => {
-        const {
-          message: {
-            chat: { id: chatId },
-          },
-          data,
-        } = msg;
+    this.bot.on("callback_query", async (msg) => {
+      const {
+        message: {
+          chat: { id: chatId },
+        },
+        data,
+      } = msg;
 
+      try {
         if (data === "change" && this.db[chatId]) {
           return await this.bot.sendMessage(
             chatId,
@@ -147,10 +147,10 @@ export default class TelegramService {
           TgMsgs.findOutForecast(city),
           TgBtns.checkWeather(city)
         );
-      });
-    } catch (error) {
-      return this.sendErrorMessage(error.message, chatId);
-    }
+      } catch (error) {
+        return this.sendErrorMessage(error.message, chatId);
+      }
+    });
   }
 
   async checkAndSetCityToDb(cityName, chatId) {
